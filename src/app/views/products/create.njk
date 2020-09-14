@@ -1,0 +1,21 @@
+{% extends "../layout.njk" %}
+
+{% block content %}
+
+<div class="card">
+
+    <form class="details" method="POST" action="/">
+        <h3>Cadastrando o seu produto</h3>
+        {% include 'products/fields.njk'%}
+
+            <div class="item">
+                <div><button class="button" type="submit">Cadastrar</button></div>
+            </div>
+
+    </form>
+    </div>
+
+{% endblock content %}
+
+
+
