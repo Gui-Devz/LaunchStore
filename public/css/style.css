@@ -101,3 +101,11 @@ nav.primary ul li a {
 nav.primary ul li a:hover {
   color: var(--primary-color);
 }
+
+/* PRODUCTS FORM */
+
+.card form {
+  background-color: white;
+
+  padding: 32px 8px;
+}

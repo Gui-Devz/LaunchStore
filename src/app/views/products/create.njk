@@ -3,17 +3,20 @@
 {% block content %}
 
 <div class="card">
+  <h3>Cadastrando o seu produto</h3>
+  <form class="form" action="/" method="POST">
 
-    <form class="details" method="POST" action="/">
-        <h3>Cadastrando o seu produto</h3>
-        {% include 'products/fields.njk'%}
+    {% include 'products/fields.njk'%}
 
-            <div class="item">
-                <div><button class="button" type="submit">Cadastrar</button></div>
-            </div>
-
-    </form>
+    <div class="item">
+      <div>
+        <button class="button" type="submit">Cadastrar</button>
+      </div>
     </div>
+
+  </form>
+</div>
+
 
 {% endblock content %}
 
