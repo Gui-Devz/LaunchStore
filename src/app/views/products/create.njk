@@ -2,19 +2,18 @@
 
 {% block content %}
 
-<div class="card">
-  <h3>Cadastrando o seu produto</h3>
-  <form class="form" action="/" method="POST">
-
-    {% include 'products/fields.njk'%}
-
-    <div class="item">
-      <div>
-        <button class="button" type="submit">Cadastrar</button>
+  <form action="/" method="post"></form>
+  <section class="container form">
+    <form class="form" action="/" method="POST">
+      <div class="header">
+        <h3>Cadastrando o seu produto</h3>
       </div>
-    </div>
+      <div class="fields">
+        {% include 'products/fields.njk'%}
+      </div>
 
-  </form>
+      <button class="button" type="submit">Cadastrar</button>
+  </section>
 </div>
 
 
