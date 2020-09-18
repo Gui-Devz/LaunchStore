@@ -21,16 +21,18 @@
   <div class="item">
     <div>Descrição</div>
     <div>
-      <textarea name="description" cols="30" rows="10">
-        {{product.description}}
-      </textarea>
+      <textarea name="description" cols="30" rows="10">{{product.description}}</textarea>
     </div>
   </div>
 
   <div class="item">
     <div>Valor</div>
     <div>
-      <input type="text" name="price" value="{{product.price}}"
+      <input
+        type="text"
+        name="price"
+        value="{{product.price}}"
+        onkeydown = "Mask.apply(this,'formatBRL')"
       {# Faremos uma máscara de dinheito em reais #}>
       {% if product.old_price %}
         <input type="hidden" name="old_price" value={{product.price}}>
