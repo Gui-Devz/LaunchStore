@@ -6,7 +6,7 @@ module.exports = {
     return res.render("layout");
   },
 
-  async create(req, res) {
+  create(req, res) {
     //pegar categorias
     Category.all()
       .then(function (results) {

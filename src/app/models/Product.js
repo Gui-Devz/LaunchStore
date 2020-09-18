@@ -16,15 +16,17 @@ module.exports = {
       RETURNING id
     `;
 
+    dataPost.price = dataPost.price.replace(/\D/g, "");
+
     const values = [
       dataPost.category_id,
-      4,
+      dataPost.user_id || 4,
       dataPost.name,
       dataPost.description,
-      dataPost.old_price,
+      dataPost.old_price || dataPost.price,
       dataPost.price,
       dataPost.quantity,
-      dataPost.status,
+      dataPost.status || 1,
     ];
 
     return db.query(query, values);
