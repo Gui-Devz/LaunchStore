@@ -31,4 +31,12 @@ module.exports = {
 
     return db.query(query, values);
   },
+
+  show(id) {
+    const query = `
+      SELECT * FROM products WHERE id = $1
+    `;
+
+    return db.query(query, [id]);
+  },
 };
