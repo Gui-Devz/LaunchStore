@@ -5,7 +5,8 @@ const routes = express.Router();
 
 routes.get("/", productsController.index);
 
-routes.get("/product/create", productsController.create);
+routes.get("/products/create", productsController.create);
+routes.get("/products/:id/edit", productsController.edit);
 routes.post("/products", productsController.post);
 
 // Alias
