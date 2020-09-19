@@ -1,0 +1,46 @@
+{% extends "../layout.njk" %}
+
+{% block content %}
+  <section class="container form">
+    <form class="form" action="/products" method="/products?_method=PUT">
+      <div class="header">
+        <h3>Editando o seu produto {{product.id}}</h3>
+      </div>
+      <input type="hidden" value="{{product.id}}">
+      <div class="fields">
+        {% include 'products/fields.njk'%}
+      </div>
+
+      <button class="button" type="submit">Salvar</button>
+
+      {# <form class="delete" method="POST" action="/products?_method=DELETE">
+        <input type="hidden" name="id" value="{{product.id}}">
+        <div class="item">
+            <div><button class="button delete" type="submit">deletar</button></div>
+        </div>
+      </form> #}
+  </section>
+
+  {# <script>
+    const deleteForm = document.querySelector(".delete");
+    const buttonSave = document.querySelector(".button");
+    deleteForm.addEventListener("submit", (event) =>{
+      const confirmation = confirm("Deseja excluir esse produto?!");
+      if (!confirmation) {
+          event.preventDefault();
+      }
+    });
+
+    buttonSave.addEventListener("click", (event) => {
+      const confirmation = confirm("Deseja salvar esse produto?!");
+
+      if (!confirmation) return event.preventDefault();
+    });
+  </script> #}
+
+
+
+{% endblock content %}
+
+
+
