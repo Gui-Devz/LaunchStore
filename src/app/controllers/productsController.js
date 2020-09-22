@@ -1,3 +1,4 @@
+const { formatPricing } = require("../../lib/utils");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 
@@ -44,7 +45,7 @@ module.exports = {
   async edit(req, res) {
     let results = await Product.show(req.params.id);
 
-    const product = results.rows[0];
+    let product = results.rows[0];
 
     if (!product) return res.send("product not found!");
 
@@ -52,6 +53,9 @@ module.exports = {
     const categories = results.rows;
 
     console.log(product);
+
+    product.old_price = formatPricing(product.old_price);
+    product.price = formatPricing(product.price);
 
     return res.render("products/edit.njk", { product, categories });
   },
