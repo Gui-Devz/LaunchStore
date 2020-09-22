@@ -11,17 +11,17 @@
         {% include 'products/fields.njk'%}
       </div>
 
-      <button class="button" type="submit">Salvar</button>
+      <button class="button" type="submit">atualizar</button>
 
-      {# <form class="delete" method="POST" action="/products?_method=DELETE">
+      <form class="delete" method="POST" action="/products?_method=DELETE">
         <input type="hidden" name="id" value="{{product.id}}">
         <div class="item">
             <div><button class="button delete" type="submit">deletar</button></div>
         </div>
-      </form> #}
+      </form>
   </section>
 
-  {# <script>
+  <script>
     const deleteForm = document.querySelector(".delete");
     const buttonSave = document.querySelector(".button");
     deleteForm.addEventListener("submit", (event) =>{
@@ -36,7 +36,7 @@
 
       if (!confirmation) return event.preventDefault();
     });
-  </script> #}
+  </script>
 
 
 
