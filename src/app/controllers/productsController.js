@@ -1,5 +1,4 @@
 const { formatPricing } = require("../../lib/utils");
-const { put } = require("../../routes");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 
@@ -83,5 +82,13 @@ module.exports = {
     const productID = results.rows[0].id;
 
     return res.redirect(`/products/${productID}/edit`);
+  },
+
+  async delete(req, res) {
+    const { id } = req.body;
+
+    await Product.delete(id);
+
+    return res.redirect("/products/create");
   },
 };
