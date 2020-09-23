@@ -1,7 +1,7 @@
 const db = require("../../config/db");
 
 module.exports = {
-  create(dataPost) {
+  create(dataPut) {
     const query = `
       INSERT INTO products (
         category_id,
@@ -16,27 +16,57 @@ module.exports = {
       RETURNING id
     `;
 
-    dataPost.price = dataPost.price.replace(/\D/g, "");
+    dataPut.price = dataPut.price.replace(/\D/g, "");
 
     const values = [
-      dataPost.category_id,
-      dataPost.user_id || 4,
-      dataPost.name,
-      dataPost.description,
-      dataPost.old_price || dataPost.price,
-      dataPost.price,
-      dataPost.quantity,
-      dataPost.status || 1,
+      dataPut.category_id,
+      dataPut.user_id || 4,
+      dataPut.name,
+      dataPut.description,
+      dataPut.old_price || dataPut.price,
+      dataPut.price,
+      dataPut.quantity,
+      dataPut.status || 1,
     ];
 
     return db.query(query, values);
   },
 
-  show(id) {
+  find(id) {
     const query = `
       SELECT * FROM products WHERE id = $1
     `;
 
     return db.query(query, [id]);
+  },
+
+  update(dataPut) {
+    const query = `
+      UPDATE products SET
+        category_id = $1,
+        user_id = $2,
+        name = $3,
+        description = $4,
+        old_price = $5,
+        price = $6,
+        quantity = $7,
+        status = $8
+      WHERE products.id = $9
+      RETURNING id
+    `;
+
+    const values = [
+      dataPut.category_id,
+      dataPut.user_id || 4,
+      dataPut.name,
+      dataPut.description,
+      dataPut.old_price || dataPut.price,
+      dataPut.price,
+      dataPut.quantity,
+      dataPut.status || 1,
+      dataPut.id,
+    ];
+
+    return db.query(query, values);
   },
 };
