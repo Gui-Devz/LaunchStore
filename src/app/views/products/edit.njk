@@ -2,23 +2,28 @@
 
 {% block content %}
   <section class="container form">
-    <form class="form" action="/products" method="/products?_method=PUT">
-      <div class="header">
-        <h3>Editando o seu produto {{product.id}}</h3>
-      </div>
-      <input type="hidden" value="{{product.id}}">
-      <div class="fields">
-        {% include 'products/fields.njk'%}
-      </div>
+    <div>
+      <form class="form" method="POST" action="/products?_method=PUT">
+        <div class="header">
+          <h3>Editando o seu produto</h3>
+        </div>
+        <input type="hidden" value="{{product.id}}">
+        <div class="fields">
+          {% include 'products/fields.njk'%}
+        </div>
 
-      <button class="button" type="submit">atualizar</button>
+        <button class="button edit" type="submit">atualizar</button>
+      </form>
+    </div>
 
+    <div>
       <form class="delete" method="POST" action="/products?_method=DELETE">
         <input type="hidden" name="id" value="{{product.id}}">
         <div class="item">
             <div><button class="button delete" type="submit">deletar</button></div>
         </div>
       </form>
+    </div>
   </section>
 
   <script>

@@ -7,7 +7,7 @@
       </div>
     </a>
     <div>
-      <form class="search" action="/products/search" method="get">
+      <form class="search" action="/products/search" method="GET">
         <input
           type="text"
           name="search"
@@ -16,11 +16,12 @@
             value="{{filter}}">
           {% endif %}
       </form>
+      <form action=""></form>
     </div>
     <nav class="primary">
       <ul>
         <li>
-          <a href="/ads/create">
+          <a href="/products/create">
             <i class="material-icons">add</i>
             Novo Anúncio
           </a>

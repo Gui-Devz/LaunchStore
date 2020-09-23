@@ -51,6 +51,7 @@
     </div>
   </div>
 
+{% if product.status == "1" or product.status == "0" %}
   <div class="item">
     <div>Disponível</div>
     <div>
@@ -74,7 +75,12 @@
           {% endif %}> Não
       </span>
     </div>
-  </div>
+{% endif %}
+
+{% if product.id %}
+  <input type="hidden" name="id" value="{{product.id}}">
+{% endif %}
+</div>
 
 
 
