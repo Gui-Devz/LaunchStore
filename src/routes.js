@@ -10,7 +10,7 @@ routes.get("/products/:id/edit", productsController.edit);
 
 routes.post("/products", productsController.post);
 routes.put("/products", productsController.put);
-//routes.delete("/products", productsController.delete);
+routes.delete("/products", productsController.delete);
 
 // Alias
 routes.get("/ads/create", (req, res) => {
