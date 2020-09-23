@@ -2,7 +2,7 @@
 
 :root {
   --primary-color: #fd951f;
-  --secondary-color: #1fd4fd;
+  --secondary-color: #1f83fd;
 }
 
 * {
@@ -58,8 +58,24 @@ body {
   transition: all 0.2s;
 }
 
+.button.edit {
+  background-color: var(--secondary-color);
+}
+
+.button.delete {
+  background-color: lightgray;
+}
+
 .button:hover {
   background-color: #ec830a;
+}
+
+.button.edit:hover {
+  background-color: #0c5cbe;
+}
+
+.button.delete:hover {
+  background-color: rgb(223, 62, 62);
 }
 
 /* HEADER */
@@ -187,6 +203,10 @@ nav.primary ul li a:hover {
   font-size: 16px;
 }
 
+.form .fields {
+  margin-bottom: 64px;
+}
+
 .form .item select {
   /*  permitir estilização no select */
   -moz-appearance: none;
@@ -206,6 +226,16 @@ nav.primary ul li a:hover {
   min-height: 150px;
 }
 
-.form .fields {
-  margin-bottom: 64px;
+.form .item span {
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  border-radius: 16px;
+  color: #777;
+  margin-right: 4px;
+  margin-top: 8px;
+
+  display: inline-block;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
 }
