@@ -39,6 +39,22 @@
       {% endif %}
     </div>
   </div>
+  <div class="item">
+    <div>Imagens</div>
+    <div>
+      <div class="photos-upload">
+        <input type="file"
+        name="photos"
+        id="images-input"
+        multiple
+        accept="images/*"
+        onchange = "PhotosUpload.handleFileInput(event)"
+        >
+        <p class="btn">Selecione até 6 fotos</p>
+      </div>
+      <div class="photos-preview"></div>
+    </div>
+  </div>
 
   <div class="item">
     <div>Quantidade</div>
