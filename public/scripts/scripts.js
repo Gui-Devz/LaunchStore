@@ -40,10 +40,11 @@ const PhotosUpload = {
 
       const reader = new FileReader();
 
+      reader.readAsDataURL(file);
+
       reader.onload = () => {
         createContainerForImage(reader.result);
       };
-      reader.readAsDataURL(file);
     });
   },
 
