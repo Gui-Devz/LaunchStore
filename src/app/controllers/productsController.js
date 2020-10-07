@@ -1,6 +1,7 @@
 const { formatPricing } = require("../../lib/utils");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
+const File = require("../models/File");
 
 module.exports = {
   index(req, res) {
@@ -32,30 +33,52 @@ module.exports = {
       }
     }
 
+    if (req.files === 0) {
+      res.send("Please send at least one image");
+    }
+
     let results = await Product.create(urlEncoded);
     const productId = results.rows[0].id;
 
-    results = await Category.all();
-    const categories = results.rows;
+    const imagesPromises = req.files.map((file) =>
+      File.create(file.filename, file.path, productId)
+    );
 
-    return res.redirect(`/products/${productId}`);
+    await Promise.all(imagesPromises);
+
+    console.log(req.files);
+
+    return res.redirect(`/products/${productId}/edit`);
   },
 
   async edit(req, res) {
+    //GET product
     let results = await Product.find(req.params.id);
-
     let product = results.rows[0];
 
     if (!product) return res.send("product not found!");
+
+    //GET categories
 
     results = await Category.all();
     const categories = results.rows;
 
     product.old_price = formatPricing(product.old_price);
     product.price = formatPricing(product.price);
-    console.log(product);
 
-    return res.render("products/edit.njk", { product, categories });
+    //GET images
+
+    results = await File.load(product.id);
+    let photos = results.rows;
+    photos = photos.map((file) => ({
+      ...file,
+      src: `${req.protocol}://${req.headers.host}${file.path.replace(
+        "public",
+        ""
+      )}`,
+    }));
+
+    return res.render("products/edit.njk", { product, categories, photos });
   },
 
   async put(req, res) {

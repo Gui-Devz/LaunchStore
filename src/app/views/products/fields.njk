@@ -52,7 +52,16 @@
         >
         <p class="btn">Selecione até 6 fotos</p>
       </div>
-      <div class="photos-preview"></div>
+      <div class="photos-preview">
+        {% if photos %}
+          {% for photo in photos %}
+            <div class="photo">
+            <img src="{{photo.src}}" alt="photo.name">
+            <i class="material-icons">close</i>
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
   </div>
 
