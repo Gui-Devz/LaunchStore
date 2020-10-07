@@ -24,8 +24,6 @@ const PhotosUpload = {
     const { files: fileList } = event.target;
     const { loadPhotoDiv } = PhotosUpload;
 
-    console.log(event.target.files);
-
     if (PhotosUpload.hasLimit(event)) return;
 
     loadPhotoDiv(fileList);
@@ -40,11 +38,10 @@ const PhotosUpload = {
 
       const reader = new FileReader();
 
-      reader.readAsDataURL(file);
-
       reader.onload = () => {
         createContainerForImage(reader.result);
       };
+      reader.readAsDataURL(file);
     });
   },
 
@@ -60,7 +57,10 @@ const PhotosUpload = {
   hasLimit(event) {
     const { uploadLimit, files, input } = PhotosUpload;
 
-    const totalFiles = files.length + input.files.length;
+    const totalPhotoDivs = document.querySelectorAll(".photo");
+    console.log(totalPhotoDivs);
+    const totalFiles =
+      files.length + input.files.length + totalPhotoDivs.length;
 
     if (totalFiles > uploadLimit) {
       alert(`Envie no máximo ${uploadLimit} fotos`);
@@ -112,6 +112,17 @@ const PhotosUpload = {
 
     PhotosUpload.input.files = PhotosUpload.getAllFiles();
 
+    PhotosUpload.addRemovedPhotoIntoInput(event);
+
     photosDiv.remove();
+  },
+
+  addRemovedPhotoIntoInput(event) {
+    const file_id = event.target.id; // getting the id from <i>
+    let inputRemove = document.querySelector(".removed-photos");
+
+    if (inputRemove) {
+      inputRemove.value += `${file_id},`;
+    }
   },
 };

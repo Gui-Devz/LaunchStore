@@ -2,6 +2,7 @@ const { formatPricing } = require("../../lib/utils");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const File = require("../models/File");
+const fs = require("fs");
 
 module.exports = {
   index(req, res) {
@@ -39,6 +40,9 @@ module.exports = {
 
     let results = await Product.create(urlEncoded);
     const productId = results.rows[0].id;
+
+    //CALLING THE FUNCTION CREATE FROM MODAL FILE FOR EACH FILE
+    //THIS RETURNS AN ARRAY OF PROMISES
 
     const imagesPromises = req.files.map((file) =>
       File.create(file.filename, file.path, productId)
@@ -92,6 +96,8 @@ module.exports = {
       }
     }
 
+    //REFRESHING OLD PRICE VALUE
+
     urlEncoded.price = urlEncoded.price.replace(/\D/g, "");
 
     if (urlEncoded.old_price != urlEncoded.price) {
@@ -99,6 +105,36 @@ module.exports = {
 
       urlEncoded.old_price = oldProduct.rows[0].price;
     }
+
+    if (urlEncoded.removed_photos) {
+      const files_id = urlEncoded.removed_photos.split(",");
+      files_id.pop(); // removing the last index (',')
+
+      //deleting from images folder
+
+      const filesPromises = files_id.map((id) => {
+        File.find(id);
+      });
+
+      await Promise.all(filesPromises).then((values) => {
+        console.log(values);
+        /* values.forEach((file) => {
+          console.log(file);
+          const path = `./public/image/${file.name}`;
+
+          fs.unlinkSync(path);
+        }); */
+      });
+
+      //Deleting from database
+      const deletingFilesPromises = files_id.map((id) => {
+        File.deleteOnlyOne(id);
+      });
+
+      await Promise.all(deletingFilesPromises);
+    }
+
+    //CALLING MODAL UPDATE FUNCTION
 
     const results = await Product.update(urlEncoded);
 
@@ -109,8 +145,23 @@ module.exports = {
 
   async delete(req, res) {
     const { id } = req.body;
+    const results = await File.load(product_id);
+    const files = results.rows;
+
+    let arrFiles = [];
+
+    for (const file of files) {
+      arrFiles.push(file.name);
+    }
+
+    arrFiles.forEach((fileName) => {
+      const path = `./public/images/${fileName}`;
+
+      fs.unlinkSync(path);
+    });
 
     await Product.delete(id);
+    await File.delete(id);
 
     return res.redirect("/products/create");
   },
