@@ -109,21 +109,16 @@ module.exports = {
     if (urlEncoded.removed_photos) {
       const files_id = urlEncoded.removed_photos.split(",");
       files_id.pop(); // removing the last index (',')
+      console.log(files_id);
 
-      //deleting from images folder
+      //Deleting from Root
+      files_id.forEach(async (id) => {
+        const result = await File.find(id);
 
-      const filesPromises = files_id.map((id) => {
-        File.find(id);
-      });
+        const file = result.rows[0];
+        console.log(file);
 
-      await Promise.all(filesPromises).then((values) => {
-        console.log(values);
-        /* values.forEach((file) => {
-          console.log(file);
-          const path = `./public/image/${file.name}`;
-
-          fs.unlinkSync(path);
-        }); */
+        fs.unlinkSync(file.path);
       });
 
       //Deleting from database
@@ -149,7 +144,7 @@ module.exports = {
 
     await Promise.all(imagesPromises);
 
-    console.log(req.files);
+    /* console.log(req.files); */
 
     return res.redirect(`/products/${productID}/edit`);
   },
