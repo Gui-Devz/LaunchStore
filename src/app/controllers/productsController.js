@@ -91,7 +91,7 @@ module.exports = {
     const keys = Object.keys(urlEncoded);
 
     for (const key of keys) {
-      if (req.body[key] == "") {
+      if (req.body[key] == "" && key != "removed_photos") {
         return res.send("Fill all the fields");
       }
     }
@@ -139,6 +139,17 @@ module.exports = {
     const results = await Product.update(urlEncoded);
 
     const productID = results.rows[0].id;
+
+    //CALLING THE FUNCTION CREATE FROM MODAL FILE FOR EACH FILE
+    //THIS RETURNS AN ARRAY OF PROMISES
+
+    const imagesPromises = req.files.map((file) =>
+      File.create(file.filename, file.path, productID)
+    );
+
+    await Promise.all(imagesPromises);
+
+    console.log(req.files);
 
     return res.redirect(`/products/${productID}/edit`);
   },
