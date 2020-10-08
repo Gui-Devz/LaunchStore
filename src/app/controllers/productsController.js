@@ -111,25 +111,19 @@ module.exports = {
       files_id.pop(); // removing the last index (',')
       console.log(files_id);
 
-      //Deleting from Root
       files_id.forEach(async (id) => {
         const result = await File.find(id);
 
         const file = result.rows[0];
         console.log(file);
 
+        //Deleting from Root
         fs.unlinkSync(file.path);
-      });
 
-      //Deleting from database
-      const deletingFilesPromises = files_id.map((id) => {
-        File.deleteOnlyOne(id);
+        //Deleting from database
+        await File.deleteOnlyOne(id);
       });
-
-      await Promise.all(deletingFilesPromises);
     }
-
-    //CALLING MODAL UPDATE FUNCTION
 
     const results = await Product.update(urlEncoded);
 
