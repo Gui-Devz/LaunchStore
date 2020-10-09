@@ -9,6 +9,12 @@ module.exports = {
     return res.render("layout");
   },
 
+  show(req, res) {
+    const { id } = req.params;
+
+    return res.render("products/show");
+  },
+
   create(req, res) {
     //pegar categorias
     Category.all()
@@ -132,13 +138,15 @@ module.exports = {
     //CALLING THE FUNCTION CREATE FROM MODAL FILE FOR EACH FILE
     //THIS RETURNS AN ARRAY OF PROMISES
 
-    const imagesPromises = req.files.map((file) =>
-      File.create(file.filename, file.path, productID)
-    );
+    if (req.files != 0) {
+      const imagesPromises = req.files.map((file) =>
+        File.create(file.filename, file.path, productID)
+      );
 
-    await Promise.all(imagesPromises);
+      await Promise.all(imagesPromises);
 
-    /* console.log(req.files); */
+      /* console.log(req.files); */
+    }
 
     return res.redirect(`/products/${productID}/edit`);
   },
