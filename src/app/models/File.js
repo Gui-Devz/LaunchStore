@@ -32,7 +32,7 @@ module.exports = {
     return db.query(query, [product_id]);
   },
 
-  deleteOnlyOne(id) {
+  deleteOnlyOne(id, files_id) {
     return db.query("DELETE FROM files WHERE id = $1", [id]);
   },
   delete(product_id) {
