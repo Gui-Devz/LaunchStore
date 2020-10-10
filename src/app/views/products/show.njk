@@ -8,26 +8,30 @@
     </div>
 
     <div class="info">
-      <h1>Computador</h1>
+      <h1>{{product.name}}</h1>
       <div class="published">
-        Publicado em 18/12 às 21h
+        Publicado em {{product.published.day}}/{{product.published.month}} às {{product.published.hours}}:{{product.published.minutes}}
       </div>
 
       <div class="description">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae
-        alias, temporibus dolore adipisci facilis et libero! Adipisci, impedit?
-        Ex rem vel suscipit neque sint illo necessitatibus sunt beatae nam
-        magnam.
+        {{product.description}}
       </div>
 
       <div class="price-buy">
         <div class="price">
-          R$ 99,99
-          <span class="old">R$ 89,00</span>
+          {{product.price}}
+          {% if product.price !== product.old_price %}
+            <span class="old">{{product.old_price}}</span>
+          {% endif %}
         </div>
-
         <div class="buy">
-          <button class="button">Comprar</button>
+          {% if product.status === 0 %}
+            <p>Produto Indisponível</p>
+          {% elseif product.quantity === 0%}
+            <p>Fora de estoque</p>
+          {%else%}
+            <button class="button">Comprar</button>
+          {% endif %}
         </div>
       </div>
     </div>
