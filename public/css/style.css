@@ -155,7 +155,7 @@ nav.primary ul li a:hover {
 
 /* PRODUCTS FORM */
 
-.container .form {
+.container.form {
   background-color: white;
 
   padding: 32px 24px;
@@ -164,7 +164,7 @@ nav.primary ul li a:hover {
   box-shadow: 2px 2px 2px -4px rgba(60, 60, 60, 0.9);
   border: 1px solid #efefef;
 
-  max-width: 700px;
+  max-width: 900px;
   width: 90%;
 }
 
