@@ -9,10 +9,17 @@ module.exports = {
     return res.render("layout");
   },
 
-  show(req, res) {
+  async show(req, res) {
     const { id } = req.params;
 
-    return res.render("products/show");
+    let results = await Product.find(id);
+    const product = results.rows[0];
+
+    if (!product) {
+      return res.send("Product not found!");
+    }
+
+    return res.render("products/show", { product });
   },
 
   create(req, res) {
