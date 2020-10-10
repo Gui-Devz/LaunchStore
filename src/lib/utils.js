@@ -4,11 +4,15 @@ module.exports = {
     const day = `0${date.getUTCDate()}`.slice(-2);
     const month = `0${date.getUTCMonth() + 1}`.slice(-2);
     const year = `${date.getUTCFullYear()}`;
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
 
     return {
       day: day,
       month: month,
       year: year,
+      hours: hours,
+      minutes: minutes,
       iso: `${year}-${month}-${day}`,
       birthday: `${day}/${month}`,
       format: `${day}/${month}/${year}`,
