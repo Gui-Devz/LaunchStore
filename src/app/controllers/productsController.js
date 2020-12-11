@@ -31,7 +31,15 @@ module.exports = {
       return res.send("Product not found!");
     }
 
-    return res.render("products/show", { product });
+    //NOW WE'LL BE LOADING THE FILES IMG AND SENDING THEM TO THE FRONT.
+
+    results = await File.load(id);
+    const files = results.rows;
+    const firstFile = files[files.length - 1];
+
+    console.log(files);
+
+    return res.render("products/show", { product, files, firstFile });
   },
 
   create(req, res) {
@@ -66,7 +74,7 @@ module.exports = {
     let results = await Product.create(urlEncoded);
     const productId = results.rows[0].id;
 
-    //CALLING THE FUNCTION CREATE FROM MODAL FILE FOR EACH FILE
+    //CALLING THE FUNCTION CREATE FROM FILE'S MODAL FOR EACH FILE
     //THIS RETURNS AN ARRAY OF PROMISES
 
     const imagesPromises = req.files.map((file) =>
@@ -74,8 +82,6 @@ module.exports = {
     );
 
     await Promise.all(imagesPromises);
-
-    console.log(req.files);
 
     return res.redirect(`/products/${productId}`);
   },
