@@ -357,6 +357,7 @@ nav.primary ul li a:hover {
 
 .product-single .gallery {
   width: 100%;
+  background-color: aliceblue;
 }
 
 .product-single .gallery img {
