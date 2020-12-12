@@ -53,4 +53,9 @@ module.exports = {
       currency: "BRL",
     }).format(value / 100);
   },
+
+  formatPath(files) {
+    for (const file of files) {
+    }
+  },
 };
