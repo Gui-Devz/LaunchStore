@@ -54,8 +54,15 @@ module.exports = {
     }).format(value / 100);
   },
 
-  formatPath(files) {
+  formatPath(files, path) {
+    let filesPath = [];
     for (const file of files) {
+      let path = file.path.slice(6);
+
+      const newPath = path.replace(/\\/gi, "/");
+      filesPath.push(newPath);
     }
+
+    return filesPath;
   },
 };
