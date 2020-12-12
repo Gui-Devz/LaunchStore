@@ -1,4 +1,4 @@
-const { formatPricing, formatBrowser } = require("../../lib/utils");
+const { formatPricing, formatBrowser, formatPath } = require("../../lib/utils");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const File = require("../models/File");
@@ -35,9 +35,11 @@ module.exports = {
 
     results = await File.load(id);
     const files = results.rows;
-    const firstFile = files[files.length - 1];
 
-    console.log(files);
+    let paths = formatPath(files);
+    const firstFile = paths[0];
+
+    /* const firstFile = files[0].path; */
 
     return res.render("products/show", { product, files, firstFile });
   },
@@ -77,9 +79,9 @@ module.exports = {
     //CALLING THE FUNCTION CREATE FROM FILE'S MODAL FOR EACH FILE
     //THIS RETURNS AN ARRAY OF PROMISES
 
-    const imagesPromises = req.files.map((file) =>
-      File.create(file.filename, file.path, productId)
-    );
+    const imagesPromises = req.files.map((file) => {
+      File.create(file.filename, file.path, productId);
+    });
 
     await Promise.all(imagesPromises);
 
@@ -116,6 +118,8 @@ module.exports = {
     return res.render("products/edit.njk", { product, categories, photos });
   },
 
+  /* TO DO
+  - FIX THIS DAMN LOGIC */
   async put(req, res) {
     const urlEncoded = req.body;
 
@@ -140,7 +144,6 @@ module.exports = {
     if (urlEncoded.removed_photos) {
       const files_id = urlEncoded.removed_photos.split(",");
       files_id.pop(); // removing the last index (',')
-      console.log(files_id);
 
       files_id.forEach(async (id) => {
         const result = await File.find(id);
@@ -164,13 +167,11 @@ module.exports = {
     //THIS RETURNS AN ARRAY OF PROMISES
 
     if (req.files != 0) {
-      const imagesPromises = req.files.map((file) =>
-        File.create(file.filename, file.path, productID)
-      );
+      const imagesPromises = req.files.map((file) => {
+        File.create(file.filename, file.path, productID);
+      });
 
       await Promise.all(imagesPromises);
-
-      /* console.log(req.files); */
     }
 
     return res.redirect(`/products/${productID}`);
@@ -178,11 +179,10 @@ module.exports = {
 
   async delete(req, res) {
     const { id } = req.body;
-    const results = await File.load(product_id);
+    const results = await File.load(id);
     const files = results.rows;
 
     let arrFiles = [];
-
     for (const file of files) {
       arrFiles.push(file.name);
     }
