@@ -119,10 +119,12 @@ const PhotosUpload = {
 
   addRemovedPhotoIntoInput(event) {
     const file_id = event.target.id; // getting the id from <i>
-    let inputRemove = document.querySelector(".removed-photos");
+    let inputRemoved = document.querySelector(".removed-photos");
+    let deleteRemoved = document.querySelector("#deleting-photos");
 
-    if (inputRemove) {
-      inputRemove.value += `${file_id},`;
+    if (inputRemoved || deleteRemoved) {
+      inputRemoved.value += `${file_id},`;
+      deleteRemoved.value += `${file_id},`;
     }
   },
 };
