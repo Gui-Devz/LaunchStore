@@ -46,6 +46,25 @@ module.exports = {
 
     return newInputs;
   },
+  /* let filesPath = [];
+  for (const file of files) {
+    const path = file.path.slice(6);
+
+    const newPath = path.replace(/\\/gi, "/");
+    filesPath.push(newPath);
+  }
+
+  return filesPath; */
+  /* formatPath(files) {
+
+    let photos = files.map((file) => ({...file}))
+    return photos;
+  } */
+
+  /* src: `${req.protocol}://${req.headers.host}${file.path.replace(
+      "public",
+      ""
+    )}` */
 
   formatPricing(value) {
     return Intl.NumberFormat("pt-BR", {
@@ -54,15 +73,23 @@ module.exports = {
     }).format(value / 100);
   },
 
-  formatPath(files, path) {
-    let filesPath = [];
+  formatPath(files, req) {
+    /* let filesPath = [];
     for (const file of files) {
       let path = file.path.slice(6);
 
       const newPath = path.replace(/\\/gi, "/");
       filesPath.push(newPath);
-    }
+    } */
 
-    return filesPath;
+    let photos = files.map((file) => ({
+      ...file,
+      src: `${req.protocol}://${req.headers.host}${file.path.replace(
+        "public",
+        ""
+      )}`,
+    }));
+
+    return photos;
   },
 };
