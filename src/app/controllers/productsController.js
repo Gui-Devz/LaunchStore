@@ -17,6 +17,7 @@ module.exports = {
   async show(req, res) {
     const { id } = req.params;
 
+    //Finding the product requested
     let results = await Product.find(id);
     const product = results.rows[0];
 
@@ -32,15 +33,13 @@ module.exports = {
     product.price = formatPricing(product.price).replace(".", ",");
     product.old_price = formatPricing(product.old_price).replace(".", ",");
 
-    if (!product) {
-      return res.send("Product not found!");
-    }
+    if (!product) return res.send("Product not found!");
 
-    //NOW WE'LL BE LOADING THE FILES IMG AND SENDING THEM TO THE FRONT.
-
+    //Getting all the photos of the product
     results = await File.load(id);
     let files = results.rows;
 
+    //Formatting the path of the photos to send to the front-end
     files = formatPath(files, req);
     const firstFile = files[0];
 
@@ -48,7 +47,7 @@ module.exports = {
   },
 
   create(req, res) {
-    //pegar categorias
+    //Getting categories
     Category.all()
       .then(function (results) {
         const categories = results.rows;
@@ -61,21 +60,20 @@ module.exports = {
   },
 
   async post(req, res) {
-    // Lógica para savar produto
     const urlEncoded = req.body;
 
     validationOfBlankForms(urlEncoded);
 
+    //Validation of quantity of photos sent
     if (req.files === 0) {
       res.send("Please send at least one image");
     }
 
+    //Adding new product to database
     let results = await Product.create(urlEncoded);
     const productId = results.rows[0].id;
 
-    //CALLING THE FUNCTION CREATE FROM FILE'S MODAL FOR EACH FILE
-    //THIS RETURNS AN ARRAY OF PROMISES
-
+    //Adding new photos to database
     const imagesPromises = req.files.map((file) => {
       File.create(file.filename, file.path, productId);
     });
@@ -86,22 +84,20 @@ module.exports = {
   },
 
   async edit(req, res) {
-    //GET product
+    //Getting product
     let results = await Product.find(req.params.id);
     let product = results.rows[0];
 
     if (!product) return res.send("product not found!");
 
-    //GET categories
-
+    //Getting categories
     results = await Category.all();
     const categories = results.rows;
 
     product.old_price = formatPricing(product.old_price);
     product.price = formatPricing(product.price);
 
-    //GET images and format their paths
-
+    //Getting photos and formatting their paths
     results = await File.load(product.id);
     let photos = results.rows;
     photos = formatPath(photos, req);
@@ -109,15 +105,12 @@ module.exports = {
     return res.render("products/edit.njk", { product, categories, photos });
   },
 
-  /* TO DO
-  - FIX THIS DAMN LOGIC */
   async put(req, res) {
     const urlEncoded = req.body;
 
     validationOfBlankForms(urlEncoded);
 
-    //REFRESHING OLD PRICE VALUE
-
+    //Updating the old price value
     urlEncoded.price = urlEncoded.price.replace(/\D/g, "");
 
     if (urlEncoded.old_price != urlEncoded.price) {
@@ -126,6 +119,7 @@ module.exports = {
       urlEncoded.old_price = oldProduct.rows[0].price;
     }
 
+    //Updating the photos excluded in the root and database
     if (urlEncoded.removed_photos) {
       const files_id = urlEncoded.removed_photos.split(",");
       files_id.pop(); // removing the last index (',')
@@ -134,7 +128,6 @@ module.exports = {
         const result = await File.find(id);
 
         const file = result.rows[0];
-        console.log(file);
 
         //Deleting from Root
         fs.unlinkSync(file.path);
@@ -144,13 +137,7 @@ module.exports = {
       });
     }
 
-    const results = await Product.update(urlEncoded);
-
-    const productID = results.rows[0].id;
-
-    //CALLING THE FUNCTION CREATE FROM MODAL FILE FOR EACH FILE
-    //THIS RETURNS AN ARRAY OF PROMISES
-
+    //Updating the photos added in the database
     if (req.files != 0) {
       const imagesPromises = req.files.map((file) => {
         File.create(file.filename, file.path, productID);
@@ -158,6 +145,10 @@ module.exports = {
 
       await Promise.all(imagesPromises);
     }
+
+    //Updating the product and getting it's ID
+    const results = await Product.update(urlEncoded);
+    const productID = results.rows[0].id;
 
     return res.redirect(`/products/${productID}`);
   },
@@ -167,19 +158,22 @@ module.exports = {
     const results = await File.load(id);
     const files = results.rows;
 
+    //Getting all the photos of the product
     let arrFiles = [];
     for (const file of files) {
       arrFiles.push(file.name);
     }
 
+    //Deleting photos from server
     arrFiles.forEach((fileName) => {
       const path = `./public/images/${fileName}`;
 
       fs.unlinkSync(path);
     });
 
-    await Product.delete(id);
+    //Deleting photos and product from database
     await File.delete(id);
+    await Product.delete(id);
 
     return res.redirect("/products/create");
   },
