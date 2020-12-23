@@ -34,12 +34,10 @@ module.exports = {
     //NOW WE'LL BE LOADING THE FILES IMG AND SENDING THEM TO THE FRONT.
 
     results = await File.load(id);
-    const files = results.rows;
+    let files = results.rows;
 
-    let paths = formatPath(files);
-    const firstFile = paths[0];
-
-    /* const firstFile = files[0].path; */
+    files = formatPath(files, req);
+    const firstFile = files[0];
 
     return res.render("products/show", { product, files, firstFile });
   },
@@ -107,13 +105,7 @@ module.exports = {
 
     results = await File.load(product.id);
     let photos = results.rows;
-    photos = photos.map((file) => ({
-      ...file,
-      src: `${req.protocol}://${req.headers.host}${file.path.replace(
-        "public",
-        ""
-      )}`,
-    }));
+    photos = formatPath(photos, req);
 
     return res.render("products/edit.njk", { product, categories, photos });
   },
