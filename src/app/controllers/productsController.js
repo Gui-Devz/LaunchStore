@@ -159,36 +159,32 @@ module.exports = {
     //Getting all the photos of this product
     const results = await File.load(id);
     const files = results.rows;
+    const countingRemovedPhotos = removed_photos.split(",");
+    countingRemovedPhotos.pop(); // removing the last index (',')
 
-    console.log(removed_photos);
-    if (removed_photos) {
-      const countingRemovedPhotos = removed_photos.split(",");
-      counting.pop(); // removing the last index (',')
-
-      if (countingRemovedPhotos.length === files.length) {
-        //Getting all the photos of the product
-        let arrFiles = [];
-        for (const file of files) {
-          arrFiles.push(file.name);
-        }
-
-        //Deleting photos from server
-        arrFiles.forEach((fileName) => {
-          const path = `./public/images/${fileName}`;
-
-          fs.unlinkSync(path);
-        });
-
-        //Deleting photos and product from database
-        await File.delete(id);
-        await Product.delete(id);
-
-        return res.redirect("/products/create");
+    if (countingRemovedPhotos.length === files.length) {
+      //Getting all the photos of the product
+      let arrFiles = [];
+      for (const file of files) {
+        arrFiles.push(file.name);
       }
-    } else {
-      return res.send(
-        "Please, delete all the photos before deleting the product!"
-      );
+
+      //Deleting photos from server
+      arrFiles.forEach((fileName) => {
+        const path = `./public/images/${fileName}`;
+
+        fs.unlinkSync(path);
+      });
+
+      //Deleting photos and product from database
+      await File.delete(id);
+      await Product.delete(id);
+
+      return res.redirect("/products/create");
     }
+
+    return res.send(
+      "Please, delete all the photos before deleting the product!"
+    );
   },
 };
