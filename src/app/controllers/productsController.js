@@ -1,4 +1,9 @@
-const { formatPricing, formatBrowser, formatPath } = require("../../lib/utils");
+const {
+  formatPricing,
+  formatBrowser,
+  formatPath,
+  validationOfBlankForms,
+} = require("../../lib/utils");
 const Category = require("../models/Category");
 const Product = require("../models/Product");
 const File = require("../models/File");
@@ -59,13 +64,7 @@ module.exports = {
     // Lógica para savar produto
     const urlEncoded = req.body;
 
-    const keys = Object.keys(urlEncoded);
-
-    for (const key of keys) {
-      if (req.body[key] == "") {
-        return res.send("Fill all the fields");
-      }
-    }
+    validationOfBlankForms(urlEncoded);
 
     if (req.files === 0) {
       res.send("Please send at least one image");
@@ -101,7 +100,7 @@ module.exports = {
     product.old_price = formatPricing(product.old_price);
     product.price = formatPricing(product.price);
 
-    //GET images
+    //GET images and format their paths
 
     results = await File.load(product.id);
     let photos = results.rows;
@@ -115,13 +114,7 @@ module.exports = {
   async put(req, res) {
     const urlEncoded = req.body;
 
-    const keys = Object.keys(urlEncoded);
-
-    for (const key of keys) {
-      if (req.body[key] == "" && key != "removed_photos") {
-        return res.send("Fill all the fields");
-      }
-    }
+    validationOfBlankForms(urlEncoded);
 
     //REFRESHING OLD PRICE VALUE
 
