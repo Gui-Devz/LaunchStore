@@ -65,7 +65,7 @@ module.exports = {
 
     return photos;
   },
-  validationOfBlankForms(fields) {
+  validationOfBlankForms(fields, req, res) {
     const keys = Object.keys(fields);
 
     for (const key of keys) {
