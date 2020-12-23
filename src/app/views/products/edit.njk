@@ -17,6 +17,7 @@
       <div>
         <form class="delete" method="POST" action="/products?_method=DELETE">
           <input type="hidden" name="id" value="{{product.id}}">
+          <input id="deleting-photos" type="hidden" name="removed_photos">
           <div class="item">
               <button class="button delete" type="submit">deletar</button>
           </div>
