@@ -46,25 +46,6 @@ module.exports = {
 
     return newInputs;
   },
-  /* let filesPath = [];
-  for (const file of files) {
-    const path = file.path.slice(6);
-
-    const newPath = path.replace(/\\/gi, "/");
-    filesPath.push(newPath);
-  }
-
-  return filesPath; */
-  /* formatPath(files) {
-
-    let photos = files.map((file) => ({...file}))
-    return photos;
-  } */
-
-  /* src: `${req.protocol}://${req.headers.host}${file.path.replace(
-      "public",
-      ""
-    )}` */
 
   formatPricing(value) {
     return Intl.NumberFormat("pt-BR", {
@@ -74,14 +55,6 @@ module.exports = {
   },
 
   formatPath(files, req) {
-    /* let filesPath = [];
-    for (const file of files) {
-      let path = file.path.slice(6);
-
-      const newPath = path.replace(/\\/gi, "/");
-      filesPath.push(newPath);
-    } */
-
     let photos = files.map((file) => ({
       ...file,
       src: `${req.protocol}://${req.headers.host}${file.path.replace(
@@ -91,5 +64,14 @@ module.exports = {
     }));
 
     return photos;
+  },
+  validationOfBlankForms(fields) {
+    const keys = Object.keys(fields);
+
+    for (const key of keys) {
+      if (req.body[key] == "" && key != "removed_photos") {
+        return res.send("Fill all the fields");
+      }
+    }
   },
 };
