@@ -62,7 +62,7 @@ module.exports = {
   async post(req, res) {
     const urlEncoded = req.body;
 
-    validationOfBlankForms(urlEncoded);
+    validationOfBlankForms(urlEncoded, req, res);
 
     //Validation of quantity of photos sent
     if (req.files === 0) {
@@ -108,7 +108,7 @@ module.exports = {
   async put(req, res) {
     const urlEncoded = req.body;
 
-    validationOfBlankForms(urlEncoded);
+    validationOfBlankForms(urlEncoded, req, res);
 
     //Updating the old price value
     urlEncoded.price = urlEncoded.price.replace(/\D/g, "");
@@ -137,6 +137,10 @@ module.exports = {
       });
     }
 
+    //Updating the product and getting it's ID
+    const results = await Product.update(urlEncoded);
+    const productID = results.rows[0].id;
+
     //Updating the photos added in the database
     if (req.files != 0) {
       const imagesPromises = req.files.map((file) => {
@@ -146,35 +150,45 @@ module.exports = {
       await Promise.all(imagesPromises);
     }
 
-    //Updating the product and getting it's ID
-    const results = await Product.update(urlEncoded);
-    const productID = results.rows[0].id;
-
     return res.redirect(`/products/${productID}`);
   },
 
   async delete(req, res) {
-    const { id } = req.body;
+    const { id, removed_photos } = req.body;
+
+    //Getting all the photos of this product
     const results = await File.load(id);
     const files = results.rows;
 
-    //Getting all the photos of the product
-    let arrFiles = [];
-    for (const file of files) {
-      arrFiles.push(file.name);
+    console.log(removed_photos);
+    if (removed_photos) {
+      const countingRemovedPhotos = removed_photos.split(",");
+      counting.pop(); // removing the last index (',')
+
+      if (countingRemovedPhotos.length === files.length) {
+        //Getting all the photos of the product
+        let arrFiles = [];
+        for (const file of files) {
+          arrFiles.push(file.name);
+        }
+
+        //Deleting photos from server
+        arrFiles.forEach((fileName) => {
+          const path = `./public/images/${fileName}`;
+
+          fs.unlinkSync(path);
+        });
+
+        //Deleting photos and product from database
+        await File.delete(id);
+        await Product.delete(id);
+
+        return res.redirect("/products/create");
+      }
+    } else {
+      return res.send(
+        "Please, delete all the photos before deleting the product!"
+      );
     }
-
-    //Deleting photos from server
-    arrFiles.forEach((fileName) => {
-      const path = `./public/images/${fileName}`;
-
-      fs.unlinkSync(path);
-    });
-
-    //Deleting photos and product from database
-    await File.delete(id);
-    await Product.delete(id);
-
-    return res.redirect("/products/create");
   },
 };
