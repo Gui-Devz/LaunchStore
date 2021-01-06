@@ -41,9 +41,8 @@ module.exports = {
 
     //Formatting the path of the photos to send to the front-end
     files = formatPath(files, req);
-    const firstFile = files[0];
 
-    return res.render("products/show", { product, files, firstFile });
+    return res.render("products/show", { product, files });
   },
 
   create(req, res) {
