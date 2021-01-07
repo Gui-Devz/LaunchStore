@@ -128,3 +128,37 @@ const PhotosUpload = {
     }
   },
 };
+
+const ImageGallery = {
+  highlight: document.querySelector(".highlight > img"),
+  previews: document.querySelectorAll(".gallery-preview img"),
+  setImage(e) {
+    const { target } = e;
+
+    ImageGallery.previews.forEach((preview) =>
+      preview.classList.remove("active")
+    );
+    target.classList.add("active");
+
+    this.highlight.src = target.src;
+  },
+};
+
+const Lightbox = {
+  modal: document.querySelector(".lightbox-target"),
+  image: document.querySelector(".lightbox-target img"),
+
+  open(e) {
+    const { target } = e;
+
+    this.modal.style.opacity = 1;
+    this.modal.style.top = 0;
+
+    this.image.src = target.src;
+  },
+
+  close() {
+    this.modal.style.opacity = 0;
+    this.modal.style.top = "-100%";
+  },
+};
