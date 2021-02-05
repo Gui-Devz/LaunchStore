@@ -1,6 +1,12 @@
 const db = require("../../config/db");
 
 module.exports = {
+  all() {
+    return db.query(`
+      SELECT * FROM products
+      ORDER BY updated_at
+    `);
+  },
   create(dataPut) {
     const query = `
       INSERT INTO products (
@@ -35,6 +41,14 @@ module.exports = {
   find(id) {
     const query = `
       SELECT * FROM products WHERE id = $1
+    `;
+
+    return db.query(query, [id]);
+  },
+
+  findFiles(id) {
+    const query = `
+      SELECT * FROM files WHERE product_id = $1
     `;
 
     return db.query(query, [id]);
