@@ -1,11 +1,16 @@
 const express = require("express");
 const multer = require("./app/middlewares/multer");
 const productsController = require("./app/controllers/productsController");
+const homeController = require("./app/controllers/homeController");
+const searchController = require("./app/controllers/searchController");
 
 const routes = express.Router();
 
-routes.get("/", productsController.index);
+routes.get("/", homeController.index);
+// Search
+routes.get("/products/search", searchController.index);
 
+//Products
 routes.get("/products/create", productsController.create);
 routes.get("/products/:id", productsController.show);
 routes.get("/products/:id/edit", productsController.edit);
