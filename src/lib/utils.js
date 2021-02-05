@@ -57,10 +57,10 @@ module.exports = {
   formatPath(files, req) {
     let photos = files.map((file) => ({
       ...file,
-      src: `${req.protocol}://${req.headers.host}${file.path.replace(
-        "public",
-        ""
-      )}`,
+      src: `${req.protocol}://${req.headers.host}${file.path
+        .replace("public", "")
+        .split("\\")
+        .join("/")}`,
     }));
 
     return photos;
