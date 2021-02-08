@@ -10,13 +10,13 @@
       <form class="search" action="/products/search" method="GET">
         <input
           type="text"
-          name="search"
+          name="filter"
           placeholder="Buscar produtos"
           {% if search.term %}
-            value="{{filter}}">
+            value="{{filter}}"
           {% endif %}
+          >
       </form>
-      <form action=""></form>
     </div>
     <nav class="primary">
       <ul>
